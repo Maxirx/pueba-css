@@ -29,8 +29,7 @@ async function initAuth0() {
 
         console.log("[Auth0] createAuth0Client detectado:", createClientFn);
         console.log("[Auth0] Configuración a usar:", AUTH0_CONFIG);
-        console.log("[Auth0] Dominio:", AUTH0_CONFIG.domain);
-        console.log("[Auth0] Client ID:", AUTH0_CONFIG.client_id);
+
 
         const config = {
             domain: AUTH0_CONFIG.domain,
@@ -40,7 +39,7 @@ async function initAuth0() {
 
 
 
-        console.log("[Auth0] Inicializando con:", { domain: config.domain, client_id: AUTH0_CONFIG.client_id });
+        console.log("[Auth0] Inicializando con:", { domain: config.domain, client_id: config.client_id });
 
         auth0Client = await createClientFn(config);
 
