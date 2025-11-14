@@ -1,36 +1,51 @@
 let auth0Client = null;
 
+// Configuración de Auth0
+const AUTH0_CONFIG = {
+    domain: "dev-pjzj6vk78rt6brrh.us.auth0.com",
+    client_id: "zjWCYwyGS2c5aXg7VNZxQp8AIb8hhOFo",
+    redirect_uri: window.location.origin
+};
+
 // Detectar ambiente dinámicamente
 const getRedirectUri = () => {
     return window.location.origin;
 };
 
 async function initAuth0() {
-    const auth0Config = {
-        domain: "dev-pjzj6vk78rt6brrh.us.auth0.com",
-        client_id: "zjWCYwyGS2c5aXg7VNZxQp8AIb8hhOFo",
-        cacheLocation: "localstorage",
-        redirect_uri: getRedirectUri()
-    };
+    try {
+        // Esperar a que createAuth0Client esté disponible
+        if (typeof window.auth0 === 'undefined' || typeof window.auth0.createAuth0Client === 'undefined') {
+            throw new Error("SDK de Auth0 no disponible");
+        }
 
-    console.log("[Auth0] Configurando con:", {
-        domain: auth0Config.domain,
-        redirect_uri: auth0Config.redirect_uri
-    });
+        const config = {
+            domain: AUTH0_CONFIG.domain,
+            client_id: AUTH0_CONFIG.client_id,
+            cacheLocation: "localstorage"
+        };
 
-    auth0Client = await createAuth0Client(auth0Config);
+        console.log("[Auth0] Inicializando con:", { domain: config.domain });
 
-    // Manejo del redirect después de login
-    if (location.search.includes("code=") && location.search.includes("state=")) {
-        await auth0Client.handleRedirectCallback();
-        window.history.replaceState({}, document.title, "/");
-    }
+        auth0Client = await window.auth0.createAuth0Client(config);
 
-    const isLoggedIn = await auth0Client.isAuthenticated();
+        // Manejo del redirect después de login
+        if (location.search.includes("code=") && location.search.includes("state=")) {
+            console.log("[Auth0] Procesando callback de Auth0...");
+            await auth0Client.handleRedirectCallback();
+            window.history.replaceState({}, document.title, "/");
+        }
 
-    if (isLoggedIn) {
-        mostrarApp();
-    } else {
+        const isLoggedIn = await auth0Client.isAuthenticated();
+        console.log("[Auth0] Usuario autenticado:", isLoggedIn);
+
+        if (isLoggedIn) {
+            mostrarApp();
+        } else {
+            mostrarLogin();
+        }
+    } catch (error) {
+        console.error("[Auth0] Error durante la inicialización:", error);
         mostrarLogin();
     }
 }
@@ -46,42 +61,75 @@ function mostrarLogin() {
 }
 
 async function login() {
-    await auth0Client.loginWithRedirect({
-        authorizationParams: {
-            redirect_uri: window.location.origin
-        }
-    });
-}
-
-async function logout() {
-    await auth0Client.logout({
-        logoutParams: {
-            returnTo: window.location.origin
-        }
-    });
-}
-
-// Esperar a que el SDK de Auth0 esté disponible
-async function waitForAuth0SDK() {
-    let attempts = 0;
-    while (typeof createAuth0Client === 'undefined' && attempts < 50) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        attempts++;
-    }
-
-    if (typeof createAuth0Client === 'undefined') {
-        console.error("[Auth0] Error: SDK no se cargó correctamente");
-        mostrarLogin();
+    if (!auth0Client) {
+        console.error("[Auth0] Cliente no inicializado");
+        alert("Error: Auth0 no está listo. Recarga la página.");
         return;
     }
 
-    console.log("[Auth0] SDK cargado correctamente");
-    initAuth0();
+    try {
+        await auth0Client.loginWithRedirect({
+            authorizationParams: {
+                redirect_uri: getRedirectUri()
+            }
+        });
+    } catch (error) {
+        console.error("[Auth0] Error en login:", error);
+        alert("Error al iniciar sesión: " + error.message);
+    }
+}
+
+async function logout() {
+    if (!auth0Client) {
+        console.error("[Auth0] Cliente no inicializado");
+        return;
+    }
+
+    try {
+        await auth0Client.logout({
+            logoutParams: {
+                returnTo: window.location.origin
+            }
+        });
+    } catch (error) {
+        console.error("[Auth0] Error en logout:", error);
+    }
+}
+
+// Cargar el SDK de Auth0 dinámicamente antes de inicializar
+function loadAuth0SDK() {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = "https://cdn.auth0.com/js/auth0-spa-js/2.5/auth0-spa-js.production.js";
+        script.async = true;
+        script.onload = () => {
+            console.log("[Auth0] SDK cargado exitosamente");
+            resolve();
+        };
+        script.onerror = () => {
+            console.error("[Auth0] Error al cargar el SDK");
+            reject(new Error("No se pudo cargar el SDK de Auth0"));
+        };
+        document.head.appendChild(script);
+    });
+}
+
+// Esperar a que el DOM esté listo y cargar SDK
+async function initializeAuth() {
+    try {
+        await loadAuth0SDK();
+        // Dar un pequeño delay para asegurar que window.auth0 esté disponible
+        await new Promise(resolve => setTimeout(resolve, 500));
+        await initAuth0();
+    } catch (error) {
+        console.error("[Auth0] Error durante la inicialización:", error);
+        mostrarLogin();
+    }
 }
 
 // Ejecutar cuando DOM esté listo
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', waitForAuth0SDK);
+    document.addEventListener('DOMContentLoaded', initializeAuth);
 } else {
-    waitForAuth0SDK();
+    initializeAuth();
 }
