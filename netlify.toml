@@ -1,0 +1,14 @@
+[build]
+  command = "echo 'No build needed'"
+  publish = "."
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+
+# Configuración para Auth0
+[context.production.environment]
+  VITE_AUTH0_DOMAIN = "dev-pjzj6vk78rt6brrh.us.auth0.com"
+  VITE_AUTH0_CLIENT_ID = "zjWCYwyGS2c5aXg7VNZxQp8AIb8hhOFo"

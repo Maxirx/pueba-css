@@ -1,11 +1,24 @@
 let auth0Client = null;
 
+// Detectar ambiente dinámicamente
+const getRedirectUri = () => {
+    return window.location.origin;
+};
+
 async function initAuth0() {
-    auth0Client = await createAuth0Client({
+    const auth0Config = {
         domain: "dev-pjzj6vk78rt6brrh.us.auth0.com",
         client_id: "zjWCYwyGS2c5aXg7VNZxQp8AIb8hhOFo",
-        cacheLocation: "localstorage"
+        cacheLocation: "localstorage",
+        redirect_uri: getRedirectUri()
+    };
+
+    console.log("[Auth0] Configurando con:", {
+        domain: auth0Config.domain,
+        redirect_uri: auth0Config.redirect_uri
     });
+
+    auth0Client = await createAuth0Client(auth0Config);
 
     // Manejo del redirect después de login
     if (location.search.includes("code=") && location.search.includes("state=")) {
