@@ -14,10 +14,23 @@ const getRedirectUri = () => {
 
 async function initAuth0() {
     try {
-        // Esperar a que createAuth0Client esté disponible
-        if (typeof window.auth0 === 'undefined' || typeof window.auth0.createAuth0Client === 'undefined') {
-            throw new Error("SDK de Auth0 no disponible");
+        // Detectar la función createAuth0Client en varias formas
+        const createClientFn = (typeof createAuth0Client !== 'undefined')
+            ? createAuth0Client
+            : (window.createAuth0Client)
+                ? window.createAuth0Client
+                : (window.auth0 && window.auth0.createAuth0Client)
+                    ? window.auth0.createAuth0Client
+                    : null;
+
+        if (!createClientFn) {
+            throw new Error("SDK de Auth0 no disponible (createAuth0Client no encontrado)");
         }
+
+        console.log("[Auth0] createAuth0Client detectado:", createClientFn);
+        console.log("[Auth0] Configuración a usar:", AUTH0_CONFIG);
+        console.log("[Auth0] Dominio:", AUTH0_CONFIG.domain);
+        console.log("[Auth0] Client ID:", AUTH0_CONFIG.client_id);
 
         const config = {
             domain: AUTH0_CONFIG.domain,
@@ -25,9 +38,11 @@ async function initAuth0() {
             cacheLocation: "localstorage"
         };
 
-        console.log("[Auth0] Inicializando con:", { domain: config.domain });
 
-        auth0Client = await window.auth0.createAuth0Client(config);
+
+        console.log("[Auth0] Inicializando con:", { domain: config.domain, client_id: AUTH0_CONFIG.client_id });
+
+        auth0Client = await createClientFn(config);
 
         // Manejo del redirect después de login
         if (location.search.includes("code=") && location.search.includes("state=")) {
@@ -68,9 +83,11 @@ async function login() {
     }
 
     try {
+        console.log('[Auth0] loginWithRedirect: redirect_uri=', getRedirectUri(), 'client_id=', AUTH0_CONFIG.client_id);
         await auth0Client.loginWithRedirect({
             authorizationParams: {
-                redirect_uri: getRedirectUri()
+                redirect_uri: getRedirectUri(),
+                client_id: AUTH0_CONFIG.client_id
             }
         });
     } catch (error) {
