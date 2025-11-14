@@ -61,4 +61,27 @@ async function logout() {
     });
 }
 
-window.onload = initAuth0;
+// Esperar a que el SDK de Auth0 esté disponible
+async function waitForAuth0SDK() {
+    let attempts = 0;
+    while (typeof createAuth0Client === 'undefined' && attempts < 50) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        attempts++;
+    }
+
+    if (typeof createAuth0Client === 'undefined') {
+        console.error("[Auth0] Error: SDK no se cargó correctamente");
+        mostrarLogin();
+        return;
+    }
+
+    console.log("[Auth0] SDK cargado correctamente");
+    initAuth0();
+}
+
+// Ejecutar cuando DOM esté listo
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', waitForAuth0SDK);
+} else {
+    waitForAuth0SDK();
+}
