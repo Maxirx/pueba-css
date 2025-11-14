@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Constancia Libre de Deuda</title>
+    <style>
+        /* Tamaño carta sin márgenes del navegador */
+        @page {
+            size: letter;
+            margin: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .page {
+            position: relative;
+            width: 21.59cm;
+            /* 8.5 in */
+            height: 27.94cm;
+            /* 11 in */
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        /* Barra roja izquierda: 1.61 cm alto x 0.34 cm ancho, un poco más arriba */
+        .barra-roja {
+            position: absolute;
+            top: 2.8cm;
+            /* antes 4cm */
+            left: 0;
+            height: 1.60cm;
+            width: 0.34cm;
+            object-fit: fill;
+        }
+
+        /* Logo La Caja: 1.77 cm alto x 1.48 cm ancho, más arriba y más a la derecha */
+        .logo-caja {
+            position: absolute;
+            top: 1.41cm;
+            /* antes 2cm */
+            right: 0.8cm;
+            /* antes 2.5cm */
+            height: 1.75cm;
+            width: 1.5cm;
+            object-fit: fill;
+        }
+
+        /* Fecha (mantengo alineada con la imagen de ejemplo) */
+        .fecha {
+            position: absolute;
+            top: 3.94cm;
+            right: 2.45cm;
+            /*             font-variant-ligatures: contextual; */
+            /*             font-weight: 540; */
+            /*             font-kerning: normal;
+            font-feature-settings: "blws" on, "calt" off;
+            font-optical-sizing: auto; */
+            /*    font: large sans-serif; */
+            font-size: 10pt;
+            font-weight: lighter;
+            display: inline-block;
+
+            /* 2. Aplicar la transformación de escala */
+            /* El primer valor (1) es la escala horizontal (ancho), se mantiene normal. */
+            /* El segundo valor (1.5) es la escala vertical (alto), se estira al 150%. */
+            transform: scale(1.01, 1.1);
+
+            /* 3. Asegurar la compatibilidad con navegadores antiguos */
+            -webkit-transform: scale(1.01, 1.1);
+            /* Safari y Chrome */
+            -moz-transform: scale(1.01, 1.1);
+            /* Firefox */
+
+            -ms-transform: scale(1.01, 1.1);
+            /* Internet Explorer */
+
+            text-shadow: 0.1px 0.1px 0.3px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Contenido principal: fuente un poco más chica y más ancho */
+        .contenido {
+            position: absolute;
+            top: 7.5cm;
+            /* apenas más abajo para compensar ajustes */
+            left: 2.45cm;
+            /* más ancho: menos margen izquierdo */
+            right: 1.75cm;
+            /* más ancho: menos margen derecho */
+            font-size: 10.5pt;
+            /* letra un poco más chica */
+            line-height: 1.1;
+            /*             background-color: lime; */
+        }
+
+        .destinatario {
+            margin: 0 0 1cm 0;
+            margin-top: -2cm;
+            font-size: 10pt;
+
+        }
+
+        /* Bloque Ref a la derecha, un poco más a la izquierda */
+        .referencia {
+            position: absolute;
+            top: 5.9cm;
+            right: 3.37cm;
+            /* antes 3cm → se corre hacia la izquierda */
+            text-align: left;
+            font-size: 10pt;
+            line-height: 1.15;
+        }
+
+        .referencia span {
+            display: block;
+        }
+
+        .parrafos {
+            margin-top: 2.7cm;
+            /*             background-color: aqua; */
+        }
+
+        .parrafos p {
+            margin: 0 0 6pt 0;
+            /* sin sangría y poco espacio entre párrafos */
+            font-size: 10.1pt;
+            text-align: justify;
+            line-height: 1.18;
+        }
+
+        .parrafos .p2 {
+            margin-top: 0.5cm;
+            margin-right: 0.5cm;
+            line-height: 1.1;
+            background-color: violet;
+            font-size: 10pt;
+            text-align: left;
+        }
+
+        .parrafos .p3 {
+            margin-top: 0.45cm;
+            font-size: 10pt;
+            text-align: left;
+        }
+
+        /* Firma: 2.01 cm alto x 2.81 cm ancho (mantengo) */
+        .firma-bloque {
+            position: absolute;
+            margin-top: 14cm;
+            left: 13.4cm;
+            text-align: center;
+            font-size: 10.5pt;
+            background-color: blueviolet;
+        }
+
+        .firma-img {
+            height: 2.01cm;
+            width: 2.81cm;
+            object-fit: fill;
+            display: block;
+            margin: 0 auto 0.3cm auto;
+        }
+
+        .firma-linea {
+            border-color: black;
+            border-width: 1pt;
+            border-style: solid;
+            width: 6cm;
+            margin: 0.8 auto 0.1cm auto;
+            margin-top: 0.5cm;
+        }
+
+        .firmante {
+            margin: 0.1cm 0 0 0;
+            line-height: 1.1;
+            font-size: 10pt;
+            font-weight: 540;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page">
+
+        <!-- Barra roja izquierda -->
+        <img src="rojo.jpg" alt="" class="barra-roja">
+
+        <!-- Logo La Caja arriba derecha -->
+        <img src="caja3.jpg" alt="La Caja de Ahorro y Seguro" class="logo-caja">
+
+        <!-- Fecha -->
+        <div class="fecha">
+            Buenos Aires, 27 de octubre de 2025
+        </div>
+
+        <!-- Bloque referencia a la derecha -->
+        <div class="referencia">
+            <span>Ref.: Seguro de</span>
+            <span>Automotor Flota</span>
+            <span>Póliza N°</span>
+            <span>5160027337603</span>
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="contenido">
+            <p class="destinatario">
+                SRES: KOMPAS SRL
+            </p>
+
+            <div class="parrafos">
+                <p>
+                    Nos dirigimos a Ustedes en representación de Caja de Seguros S.A., con el objeto de dar respuesta a
+                    vuestra solicitud de extensión de una constancia que les permita justificar fehacientemente ante
+                    quien corresponda, el estado de pago de los premios de la póliza N° 5160027337603
+                </p>
+
+                <p class="p2">
+                    En tal sentido, les informamos que la póliza de referencia está adherida al débito automático de
+                    MACRO
+                    Suc.CENTRAL XXXXXXXXXXXXXXXXXX4841, tiene vigencia desde las 12hs del 31/08/2025 hasta las
+                    12hs del 28/02/2026 y se encuentra con sus pagos al día y sin deuda exigible hasta el 28/11/2025
+                    inclusive.
+                </p>
+
+                <p class="p3">
+                    Sin otro particular, los saludamos muy atentamente.
+                </p>
+            </div>
+        </div>
+
+        <!-- Firma y bloque de cargo -->
+        <div class="firma-bloque">
+            <img src="firma.jpg" alt="Firma" class="firma-img">
+            <div class="firma-linea"></div>
+            <p class="firmante">
+                Víctor Carpinelli<br>
+                Jefe de Servicios de Cobranzas<br>
+                Gerencia de Operaciones y Servicios<br>
+                de Negocio
+            </p>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

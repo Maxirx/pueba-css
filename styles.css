@@ -1,0 +1,216 @@
+/* ---------- Layout general ---------- */
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #f0f0f0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.layout {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+/* Panel del formulario */
+.form-panel {
+    width: 280px;
+    background: #ffffff;
+    padding: 16px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.form-panel h1 {
+    font-size: 16px;
+    margin-top: 0;
+}
+
+.form-panel form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-panel label {
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+}
+
+.form-panel input {
+    padding: 4px 6px;
+    font-size: 13px;
+    margin-top: 2px;
+}
+
+.form-panel button {
+    margin-top: 6px;
+    padding: 6px 8px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* Panel de vista previa */
+.preview-panel {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* ---------- Hoja tamaño carta y carta en sí ---------- */
+
+@page {
+    size: letter;
+    margin: 0;
+}
+
+.page {
+    position: relative;
+    width: 21.59cm;
+    /* 8.5 in */
+    height: 27.94cm;
+    /* 11 in */
+    margin: 0 auto;
+    box-sizing: border-box;
+    background: #ffffff;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Barra roja izquierda: ~1.6 cm x 0.34 cm */
+.barra-roja {
+    position: absolute;
+    top: 2.8cm;
+    left: 0;
+    height: 1.60cm;
+    width: 0.34cm;
+    object-fit: fill;
+}
+
+/* Logo La Caja: ~1.77 cm x 1.48 cm */
+.logo-caja {
+    position: absolute;
+    top: 1.41cm;
+    right: 0.8cm;
+    height: 1.75cm;
+    width: 1.5cm;
+    object-fit: fill;
+}
+
+/* Fecha */
+.fecha {
+    position: absolute;
+    top: 3.94cm;
+    right: 2.45cm;
+    font-size: 10pt;
+    font-weight: lighter;
+}
+
+/* Contenido principal */
+.contenido {
+    position: absolute;
+    top: 7.5cm;
+    left: 2.45cm;
+    right: 1.75cm;
+    font-size: 10.5pt;
+    line-height: 1.1;
+}
+
+.destinatario {
+    margin: 0 0 1cm 0;
+    margin-top: -2cm;
+    font-size: 10pt;
+}
+
+/* Bloque Ref */
+.referencia {
+    position: absolute;
+    top: 5.9cm;
+    right: 3.37cm;
+    text-align: left;
+    font-size: 10pt;
+    line-height: 1.15;
+}
+
+.referencia span {
+    display: block;
+}
+
+.parrafos {
+    margin-top: 2.7cm;
+}
+
+.parrafos p {
+    margin: 0 0 6pt 0;
+    font-size: 10.1pt;
+    text-align: justify;
+    line-height: 1.18;
+}
+
+.parrafos .p2 {
+    margin-top: 0.5cm;
+    margin-right: 0.5cm;
+    line-height: 1.1;
+    font-size: 10pt;
+    text-align: left;
+}
+
+.parrafos .p3 {
+    margin-top: 0.45cm;
+    font-size: 10pt;
+    text-align: left;
+}
+
+/* Firma */
+.firma-bloque {
+    position: absolute;
+    margin-top: 14cm;
+    left: 13.4cm;
+    text-align: center;
+    font-size: 10.5pt;
+}
+
+.firma-img {
+    height: 2.01cm;
+    width: 2.81cm;
+    object-fit: fill;
+    display: block;
+    margin: 0 auto 0.3cm auto;
+}
+
+.firma-linea {
+    border-color: black;
+    border-width: 1pt;
+    border-style: solid;
+    width: 6cm;
+    margin: 0.5cm auto 0.1cm auto;
+}
+
+.firmante {
+    margin: 0.1cm 0 0 0;
+    line-height: 1.1;
+    font-size: 10pt;
+    font-weight: 540;
+}
+
+/* En modo impresión, ocultar panel de formulario y sombras */
+@media print {
+    body {
+        background: #ffffff;
+    }
+
+    .layout {
+        padding: 0;
+    }
+
+    .form-panel {
+        display: none;
+    }
+
+    .page {
+        box-shadow: none;
+    }
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Constancia Libre de Deuda – Dinámica</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <div class="layout">
+
+        <!-- Panel de formulario -->
+        <section class="form-panel">
+            <h1>Datos de la constancia</h1>
+
+            <form id="deudaForm">
+                <label>
+                    Fecha de la carta
+                    <input type="date" id="inputFechaCarta" required>
+                </label>
+
+                <label>
+                    Número de póliza
+                    <input type="text" id="inputPoliza" required>
+                </label>
+
+                <label>
+                    Fecha de inicio de vigencia
+                    <input type="date" id="inputInicioVigencia" required>
+                </label>
+
+                <label>
+                    Fecha final de vigencia
+                    <input type="date" id="inputFinVigencia" required>
+                </label>
+
+                <label>
+                    Fecha final de libre deuda
+                    <input type="date" id="inputFinLibreDeuda" required>
+                </label>
+
+                <button type="button" id="btnActualizar">Actualizar carta</button>
+                <button type="button" onclick="window.print()">Imprimir / PDF</button>
+            </form>
+        </section>
+
+        <!-- Panel de vista previa de la carta -->
+        <section class="preview-panel">
+            <div class="page">
+
+                <!-- Barra roja izquierda -->
+                <img src="rojo.jpg" alt="" class="barra-roja">
+
+                <!-- Logo La Caja arriba derecha -->
+                <img src="caja3.jpg" alt="La Caja de Ahorro y Seguro" class="logo-caja">
+
+                <!-- Fecha -->
+                <div class="fecha" id="fechaCarta">
+                    Buenos Aires, 27 de octubre de 2025
+                </div>
+
+                <!-- Bloque referencia a la derecha -->
+                <div class="referencia">
+                    <span>Ref.: Seguro de</span>
+                    <span>Automotor Flota</span>
+                    <span>Póliza N°</span>
+                    <span id="polizaNumeroRef">5160027337603</span>
+                </div>
+
+                <!-- Contenido principal -->
+                <div class="contenido">
+                    <p class="destinatario">
+                        SRES: KOMPAS SRL
+                    </p>
+
+                    <div class="parrafos">
+                        <p>
+                            Nos dirigimos a Ustedes en representación de Caja de Seguros S.A., con el objeto de dar
+                            respuesta a
+                            vuestra solicitud de extensión de una constancia que les permita justificar fehacientemente
+                            ante
+                            quien corresponda, el estado de pago de los premios de la póliza N°
+                            <span id="polizaNumeroTexto">5160027337603</span>.
+                        </p>
+
+                        <p class="p2">
+                            En tal sentido, les informamos que la póliza de referencia está adherida al débito
+                            automático de
+                            MACRO Suc.CENTRAL XXXXXXXXXXXXXXXXXX4841, tiene vigencia desde las 12hs del
+                            <span id="fechaInicioVigenciaTexto">31/08/2025</span> hasta las 12hs del
+                            <span id="fechaFinVigenciaTexto">28/02/2026</span> y se encuentra con sus pagos al día y sin
+                            deuda exigible hasta el <span id="fechaFinLibreDeudaTexto">28/11/2025</span> inclusive.
+                        </p>
+
+                        <p class="p3">
+                            Sin otro particular, los saludamos muy atentamente.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Firma y bloque de cargo -->
+                <div class="firma-bloque">
+                    <img src="firma2.jpg" alt="Firma" class="firma-img">
+                    <div class="firma-linea"></div>
+                    <p class="firmante">
+                        Víctor Carpinelli<br>
+                        Jefe de Servicios de Cobranzas<br>
+                        Gerencia de Operaciones y Servicios<br>
+                        de Negocio
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
