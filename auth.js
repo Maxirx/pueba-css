@@ -30,28 +30,57 @@ async function initAuth0() {
         console.log("[Auth0] createAuth0Client detectado:", createClientFn);
         console.log("[Auth0] Configuración a usar:", AUTH0_CONFIG);
 
-
         const config = {
             domain: AUTH0_CONFIG.domain,
             client_id: AUTH0_CONFIG.client_id,
             cacheLocation: "localstorage"
         };
 
-
-
         console.log("[Auth0] Inicializando con:", { domain: config.domain, client_id: config.client_id });
 
         auth0Client = await createClientFn(config);
+        console.log("[Auth0] Cliente Auth0 inicializado correctamente");
 
         // Manejo del redirect después de login
         if (location.search.includes("code=") && location.search.includes("state=")) {
             console.log("[Auth0] Procesando callback de Auth0...");
-            await auth0Client.handleRedirectCallback();
+            console.log("[Auth0] URL actual:", window.location.href);
+            console.log("[Auth0] Parámetros detectados:", {
+                code: new URLSearchParams(location.search).get('code'),
+                state: new URLSearchParams(location.search).get('state')
+            });
+            try {
+                const result = await auth0Client.handleRedirectCallback();
+                console.log("[Auth0] handleRedirectCallback completado:", result);
+            } catch (callbackError) {
+                console.error("[Auth0] Error en handleRedirectCallback (token exchange):", callbackError);
+                console.error("[Auth0] Detalles del error:", {
+                    name: callbackError.name,
+                    message: callbackError.message,
+                    error: callbackError.error,
+                    error_description: callbackError.error_description,
+                    status: callbackError.status,
+                    statusText: callbackError.statusText
+                });
+                throw callbackError;
+            }
             window.history.replaceState({}, document.title, "/");
+        } else {
+            console.log("[Auth0] No hay parámetros de callback en la URL");
         }
 
         const isLoggedIn = await auth0Client.isAuthenticated();
         console.log("[Auth0] Usuario autenticado:", isLoggedIn);
+
+        // Log adicional: obtener usuario si está autenticado
+        if (isLoggedIn) {
+            try {
+                const user = await auth0Client.getUser();
+                console.log("[Auth0] Usuario obtenido:", user);
+            } catch (e) {
+                console.error("[Auth0] Error obteniendo usuario:", e);
+            }
+        }
 
         if (isLoggedIn) {
             mostrarApp();
@@ -89,9 +118,15 @@ async function login() {
                 client_id: AUTH0_CONFIG.client_id
             }
         });
-    } catch (error) {
-        console.error("[Auth0] Error en login:", error);
-        alert("Error al iniciar sesión: " + error.message);
+    } catch (loginError) {
+        console.error("[Auth0] Error en loginWithRedirect:", loginError);
+        console.error("[Auth0] Detalles del error:", {
+            name: loginError.name,
+            message: loginError.message,
+            error: loginError.error,
+            error_description: loginError.error_description
+        });
+        alert("Error al iniciar sesión: " + loginError.message);
     }
 }
 
