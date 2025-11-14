@@ -3,7 +3,7 @@ let auth0Client = null;
 // Configuración de Auth0
 const AUTH0_CONFIG = {
     domain: "dev-pjzj6vk78rt6brrh.us.auth0.com",
-    client_id: "zjWCYwyGS2c5aXg7VNZxQp8AIb8hhOFo",
+    client_id: "IOCwAan7H4Pzb0nEteh8MKCZNF87PqS2",
     redirect_uri: window.location.origin
 };
 
