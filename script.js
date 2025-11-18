@@ -11,7 +11,8 @@ function formatearFechaDDMMYYYY(valor) {
     const { y, m, d } = partes;
     const dia = String(d).padStart(2, "0");
     const mes = String(m).padStart(2, "0");
-    return `${dia}/${mes}/${y}`;
+    // Mostrar con guiones DD-MM-YYYY según solicitud
+    return `${dia}-${mes}-${y}`;
 }
 
 function formatearFechaCarta(valor) {
@@ -74,4 +75,42 @@ window.addEventListener("DOMContentLoaded", () => {
         .forEach(id => {
             document.getElementById(id).addEventListener("change", actualizarCarta);
         });
+});
+
+function imprimirContenido() {
+    const finLibreDeudaInput = document.getElementById("inputFinLibreDeuda").value;
+    const poliza = document.getElementById("inputPoliza").value
+    const nombreArchivo = `Kompas_libreDeuda_${poliza} V.${finLibreDeudaInput}`; // Este es el nombre del archivo que quieres imprimir
+    console.log("Nombre de archivo para imprimir:", nombreArchivo);
+    console.log("Título actual de la página:", document.title);
+    document.title = nombreArchivo; // Cambia el título de la página para que se use como nombre de archivo al imprimir
+
+
+    window.print(); // Abre el cuadro de diálogo de impresión
+}
+
+// Imprimir usando window.print() y ajustar el título para que el diálogo use el nombre deseado
+function imprimirConNombre() {
+    const poliza = document.getElementById("inputPoliza").value || "sin_poliza";
+    const finLibreDeudaInput = document.getElementById("inputFinLibreDeuda").value || "sin_fecha";
+    // formatear fecha a DD-MM-YYYY (ya lo hace formatearFechaDDMMYYYY)
+    const fechaFormateada = formatearFechaDDMMYYYY(finLibreDeudaInput);
+    const nombreArchivo = `Kompas_libreDeuda_${poliza} V.${fechaFormateada}`;
+
+    // Guardar título original y cambiarlo temporalmente
+    const tituloOriginal = document.title;
+    document.title = nombreArchivo;
+
+    // Llamar al diálogo de impresión del navegador
+    window.print();
+
+    // Restaurar título original después de un pequeño delay
+    setTimeout(() => {
+        document.title = tituloOriginal;
+    }, 1000);
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    const btn = document.getElementById("btnImprimir");
+    if (btn) btn.addEventListener('click', imprimirConNombre);
 });
