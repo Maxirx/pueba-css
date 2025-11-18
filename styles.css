@@ -120,15 +120,20 @@ body {
 }
 
 .destinatario {
+    display: block;
     margin: 0 0 1cm 0;
     margin-top: -2cm;
     font-size: 10pt;
 }
 
+.destinatario span {
+    display: block;
+}
+
 /* Bloque Ref */
 .referencia {
     position: absolute;
-    top: 5.9cm;
+    top: 6.5cm;
     right: 3.37cm;
     text-align: left;
     font-size: 10pt;
@@ -138,6 +143,7 @@ body {
 .referencia side {
     display: block;
 }
+
 
 .parrafos {
     margin-top: 2.7cm;
