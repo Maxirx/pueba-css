@@ -78,9 +78,9 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 function imprimirContenido() {
-    const finLibreDeudaInput = document.getElementById("inputFinLibreDeuda").value;
+    const fechaCartaInput = document.getElementById("inputFechaCarta").value;
     const poliza = document.getElementById("inputPoliza").value
-    const nombreArchivo = `Kompas_libreDeuda_${poliza} V.${finLibreDeudaInput}`; // Este es el nombre del archivo que quieres imprimir
+    const nombreArchivo = `Kompas_libreDeuda_${poliza} V.${fechaCartaInput}`; // Este es el nombre del archivo que quieres imprimir
     console.log("Nombre de archivo para imprimir:", nombreArchivo);
     console.log("Título actual de la página:", document.title);
     document.title = nombreArchivo; // Cambia el título de la página para que se use como nombre de archivo al imprimir
