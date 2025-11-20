@@ -11,8 +11,8 @@ function formatearFechaDDMMYYYY(valor) {
     const { y, m, d } = partes;
     const dia = String(d).padStart(2, "0");
     const mes = String(m).padStart(2, "0");
-    // Mostrar con guiones DD-MM-YYYY según solicitud
-    return `${dia}-${mes}-${y}`;
+    // Mostrar con guiones DD/MM/YYYY según solicitud
+    return `${dia}/${mes}/${y}`;
 }
 
 function formatearFechaCarta(valor) {
