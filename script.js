@@ -11,8 +11,8 @@ function formatearFechaDDMMYYYY(valor) {
     const { y, m, d } = partes;
     const dia = String(d).padStart(2, "0");
     const mes = String(m).padStart(2, "0");
-    // Mostrar con guiones DD/MM/YYYY según solicitud
-    return `${dia}/${mes}/${y}`;
+    // Mostrar con guiones DD-MM-YYYY según solicitud
+    return `${dia}-${mes}-${y}`;
 }
 
 function formatearFechaCarta(valor) {
@@ -32,6 +32,7 @@ function formatearFechaCarta(valor) {
 function actualizarCarta() {
     const fechaCartaInput = document.getElementById("inputFechaCarta").value;
     const poliza = document.getElementById("inputPoliza").value || "__________";
+    const destinatario = document.getElementById("inputDestinatario") ? document.getElementById("inputDestinatario").value.toUpperCase() : "Karlos SRL";
     const inicioVigenciaInput = document.getElementById("inputInicioVigencia").value;
     const finVigenciaInput = document.getElementById("inputFinVigencia").value;
     const finLibreDeudaInput = document.getElementById("inputFinLibreDeuda").value;
@@ -44,6 +45,10 @@ function actualizarCarta() {
     // Número de póliza (dos lugares: referencia y primer párrafo)
     document.getElementById("polizaNumeroRef").textContent = poliza;
     document.getElementById("polizaNumeroTexto").textContent = poliza;
+
+    // Destinatario dinámico
+    const destElem = document.getElementById("destinatarioNombre");
+    if (destElem) destElem.textContent = destinatario || "KOMPAS SRL";
 
     // Fechas de vigencia y libre deuda
     document.getElementById("fechaInicioVigenciaTexto").textContent =
@@ -60,6 +65,8 @@ window.addEventListener("DOMContentLoaded", () => {
     // Valores por defecto (los de tu ejemplo)
     document.getElementById("inputFechaCarta").value = "2025-10-27";
     document.getElementById("inputPoliza").value = "5160027337603";
+    // Valor por defecto para destinatario
+    if (document.getElementById("inputDestinatario")) document.getElementById("inputDestinatario").value = "KOMPAS SRL";
     document.getElementById("inputInicioVigencia").value = "2025-08-31";
     document.getElementById("inputFinVigencia").value = "2026-02-28";
     document.getElementById("inputFinLibreDeuda").value = "2025-11-28";
@@ -71,7 +78,7 @@ window.addEventListener("DOMContentLoaded", () => {
     document.getElementById("btnActualizar").addEventListener("click", actualizarCarta);
 
     // También actualizar al cambiar cualquier campo
-    ["inputFechaCarta", "inputPoliza", "inputInicioVigencia", "inputFinVigencia", "inputFinLibreDeuda"]
+    ["inputFechaCarta", "inputPoliza", "inputDestinatario", "inputInicioVigencia", "inputFinVigencia", "inputFinLibreDeuda"]
         .forEach(id => {
             document.getElementById(id).addEventListener("change", actualizarCarta);
         });
@@ -95,7 +102,11 @@ function imprimirConNombre() {
     const finLibreDeudaInput = document.getElementById("inputFinLibreDeuda").value || "sin_fecha";
     // formatear fecha a DD-MM-YYYY (ya lo hace formatearFechaDDMMYYYY)
     const fechaFormateada = formatearFechaDDMMYYYY(finLibreDeudaInput);
-    const nombreArchivo = `Kompas_libreDeuda_${poliza} V.${fechaFormateada}`;
+    // Incluir destinatario en el nombre del archivo, sanitizado
+    const destinatarioRaw = document.getElementById("inputDestinatario") ? document.getElementById("inputDestinatario").value : "KOMPAS SRL";
+    // Sanitizar: trim, reemplazar espacios por guiones bajos, eliminar caracteres no alfanuméricos excepto guion bajo y guion
+    const destinatarioSanitizado = destinatarioRaw.trim().replace(/\s+/g, '_').replace(/[^\w\-]/g, '').substring(0, 60).toUpperCase();
+    const nombreArchivo = `${destinatarioSanitizado}_libreDeuda_${poliza}_ V.${fechaFormateada}`;
 
     // Guardar título original y cambiarlo temporalmente
     const tituloOriginal = document.title;
